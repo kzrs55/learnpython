@@ -1,11 +1,12 @@
-#coding=utf-8
+# coding=utf-8
 import curses
-from random import randrange, choice # generate and place new tile
+from random import randrange, choice  # generate and place new tile
 from collections import defaultdict
 
 letter_codes = [ord(ch) for ch in 'WASDRQwasdrq']
 actions = ['Up', 'Left', 'Down', 'Right', 'Restart', 'Exit']
 actions_dict = dict(zip(letter_codes, actions * 2))
+
 
 def get_user_action(keyboard):
     char = "N"
@@ -13,11 +14,14 @@ def get_user_action(keyboard):
         char = keyboard.getch()
     return actions_dict[char]
 
+
 def transpose(field):
     return [list(row) for row in zip(*field)]
 
+
 def invert(field):
     return [row[::-1] for row in field]
+
 
 class GameField(object):
     def __init__(self, height=4, width=4, win=2048):
@@ -38,7 +42,7 @@ class GameField(object):
 
     def move(self, direction):
         def move_row_left(row):
-            def tighten(row): # squeese non-zero elements together
+            def tighten(row):  # squeese non-zero elements together
                 new_row = [i for i in row if i != 0]
                 new_row += [0 for i in range(len(row) - len(new_row))]
                 return new_row
@@ -59,17 +63,18 @@ class GameField(object):
                             new_row.append(row[i])
                 assert len(new_row) == len(row)
                 return new_row
+
             return tighten(merge(tighten(row)))
 
         moves = {}
-        moves['Left']  = lambda field:                              \
-                [move_row_left(row) for row in field]
-        moves['Right'] = lambda field:                              \
-                invert(moves['Left'](invert(field)))
-        moves['Up']    = lambda field:                              \
-                transpose(moves['Left'](transpose(field)))
-        moves['Down']  = lambda field:                              \
-                transpose(moves['Right'](transpose(field)))
+        moves['Left'] = lambda field: \
+            [move_row_left(row) for row in field]
+        moves['Right'] = lambda field: \
+            invert(moves['Left'](invert(field)))
+        moves['Up'] = lambda field: \
+            transpose(moves['Left'](transpose(field)))
+        moves['Down'] = lambda field: \
+            transpose(moves['Right'](transpose(field)))
 
         if direction in moves:
             if self.move_is_possible(direction):
@@ -90,6 +95,7 @@ class GameField(object):
         help_string2 = '     (R)Restart (Q)Exit'
         gameover_string = '           GAME OVER'
         win_string = '          YOU WIN!'
+
         def cast(string):
             screen.addstr(string + '\n')
 
@@ -123,85 +129,86 @@ class GameField(object):
 
     def spawn(self):
         new_element = 4 if randrange(100) > 89 else 2
-        (i,j) = choice([(i,j) for i in range(self.width) for j in range(self.height) if self.field[i][j] == 0])
+        (i, j) = choice([(i, j) for i in range(self.width) for j in range(self.height) if self.field[i][j] == 0])
         self.field[i][j] = new_element
 
     def move_is_possible(self, direction):
         def row_is_left_movable(row):
-            def change(i): # true if there'll be change in i-th tile
-                if row[i] == 0 and row[i + 1] != 0: # Move
+            def change(i):  # true if there'll be change in i-th tile
+                if row[i] == 0 and row[i + 1] != 0:  # Move
                     return True
-                if row[i] != 0 and row[i + 1] == row[i]: # Merge
+                if row[i] != 0 and row[i + 1] == row[i]:  # Merge
                     return True
                 return False
+
             return any(change(i) for i in range(len(row) - 1))
 
         check = {}
-        check['Left']  = lambda field:                              \
-                any(row_is_left_movable(row) for row in field)
+        check['Left'] = lambda field: \
+            any(row_is_left_movable(row) for row in field)
 
-        check['Right'] = lambda field:                              \
-                 check['Left'](invert(field))
+        check['Right'] = lambda field: \
+            check['Left'](invert(field))
 
-        check['Up']    = lambda field:                              \
-                check['Left'](transpose(field))
+        check['Up'] = lambda field: \
+            check['Left'](transpose(field))
 
-        check['Down']  = lambda field:                              \
-                check['Right'](transpose(field))
+        check['Down'] = lambda field: \
+            check['Right'](transpose(field))
 
         if direction in check:
             return check[direction](self.field)
         else:
             return False
 
+
 def main(stdscr):
     def init():
-        #重置游戏棋盘
+        # 重置游戏棋盘
         game_field.reset()
         return 'Game'
 
     def not_game(state):
-        #画出 GameOver 或者 Win 的界面
+        # 画出 GameOver 或者 Win 的界面
         game_field.draw(stdscr)
-        #读取用户输入得到action，判断是重启游戏还是结束游戏
+        # 读取用户输入得到action，判断是重启游戏还是结束游戏
         action = get_user_action(stdscr)
-        responses = defaultdict(lambda: state) #默认是当前状态，没有行为就会一直在当前界面循环
-        responses['Restart'], responses['Exit'] = 'Init', 'Exit' #对应不同的行为转换到不同的状态
+        responses = defaultdict(lambda: state)  # 默认是当前状态，没有行为就会一直在当前界面循环
+        responses['Restart'], responses['Exit'] = 'Init', 'Exit'  # 对应不同的行为转换到不同的状态
         return responses[action]
 
     def game():
-        #画出当前棋盘状态
+        # 画出当前棋盘状态
         game_field.draw(stdscr)
-        #读取用户输入得到action
+        # 读取用户输入得到action
         action = get_user_action(stdscr)
 
         if action == 'Restart':
             return 'Init'
         if action == 'Exit':
             return 'Exit'
-        if game_field.move(action): # move successful
+        if game_field.move(action):  # move successful
             if game_field.is_win():
                 return 'Win'
             if game_field.is_gameover():
                 return 'Gameover'
         return 'Game'
 
-
     state_actions = {
-            'Init': init,
-            'Win': lambda: not_game('Win'),
-            'Gameover': lambda: not_game('Gameover'),
-            'Game': game
-        }
+        'Init': init,
+        'Win': lambda: not_game('Win'),
+        'Gameover': lambda: not_game('Gameover'),
+        'Game': game
+    }
 
     curses.use_default_colors()
     game_field = GameField(win=32)
 
-
     state = 'Init'
 
-    #状态机开始循环
+    # 状态机开始循环
     while state != 'Exit':
         state = state_actions[state]()
+
 
 curses.wrapper(main)
