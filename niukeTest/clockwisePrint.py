@@ -1,4 +1,4 @@
-#coding=utf-8
+# coding=utf-8
 __author__ = 'zjutK'
 '''
 题目描述
@@ -9,6 +9,8 @@ __author__ = 'zjutK'
 [[1,2],[3,4]],2,2
 返回：[1,2,4,3]
 '''
+
+
 class Printer:
     def clockwisePrint(self, mat, n, m):
         pass
