@@ -37,3 +37,6 @@ if __name__ == '__main__':
     for object in (bob,tom):
         object.give_rise(0.1)
         print(object)
+    print(bob.__class__)    # <class '__main__.Person'>
+    print(list(bob.__dict__.keys()))    # ['job', 'pay', 'name']
+    print(bob.__dict__.keys())      # dict_keys(['job', 'name', 'pay'])
