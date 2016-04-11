@@ -12,7 +12,7 @@ class Person(object):
 
     # 返回名字
     def last_name(self):
-        return self.name.split(' ')[-1]
+        return self.name.split(' ')[0]
 
     # 返回工资
     def give_rise(self, percent):
@@ -34,3 +34,6 @@ if __name__ == '__main__':
     tom = Manager('tom smith', job='student', pay=10)
     print(tom.last_name())
     print(tom)
+    for object in (bob,tom):
+        object.give_rise(0.1)
+        print(object)
