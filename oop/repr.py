@@ -10,6 +10,9 @@ class Adder(object):
     def __add__(self, other):
         return self.data + other
 
+    def __str__(self):
+        return 'value:%s'%self.data
+
 
 class AddRepr(Adder):
     def __repr__(self):
@@ -19,4 +22,4 @@ class AddRepr(Adder):
 if __name__ == '__main__':
     x = AddRepr(2)
     print(x + 1)  # run__add__
-    print(x)  # run __repr__
+    print(x)  # 如果没有__str__,run __repr__ ,没有则run __repr__
