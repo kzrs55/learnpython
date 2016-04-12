@@ -63,3 +63,4 @@ target/
 .DS_Store/
 .python-version/
 
+/oop/person_db.db
