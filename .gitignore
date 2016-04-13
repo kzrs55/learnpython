@@ -60,7 +60,7 @@ docs/_build/
 target/
 
 .idea/
-.DS_Store/
 .python-version/
 
 /oop/person_db.db
+.DS_Store
