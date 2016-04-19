@@ -1,6 +1,7 @@
 # coding=utf-8
 import unittest
 
+import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
@@ -32,6 +33,7 @@ class NewVisitorTest(unittest.TestCase):
         inputbox.send_keys('Buy peacock feathers')
         # 按下更新,页面显示更新
         inputbox.send_keys(Keys.ENTER)
+        # time.sleep(10)
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
         self.assertTrue(
