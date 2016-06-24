@@ -6,7 +6,6 @@
 # your spiders.
 
 
-# -*- coding: utf-8 -*-
 from scrapy import Request, FormRequest
 from scrapy.spiders import CrawlSpider
 

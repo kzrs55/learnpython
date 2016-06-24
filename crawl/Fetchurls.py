@@ -10,7 +10,7 @@ __author__ = 'zjutK'
 
 class FetchUrl(threading.Thread):
     def __init__(self,urls,output):
-        super().__init__()
+        super(FetchUrl,self).__init__()
         self.urls=urls
         self.output=output
 

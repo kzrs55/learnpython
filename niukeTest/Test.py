@@ -1,8 +1,20 @@
-#coding=utf-8
-from pip._vendor.distlib.compat import raw_input
+class BaseAdder(object):
+    def add(self, a, b):
+        return a + b
 
-__author__ = 'zjutK'
-start_url={ "params": {"p":u"杭州"},"urlTemplate": "http://www.court.gov.cn/search.html?content={p}"}
+class NonReturningAdder(BaseAdder):
+    def add(self, a, b):
+        super(NonReturningAdder, self).add(a, b)
 
-for i,j in start_url.items():
-    print(i,)
+class ReturningAdder(BaseAdder):
+    def add(self, a, b):
+        return super(ReturningAdder, self).add(a, b)
+
+
+if __name__ == '__main__':
+    a = NonReturningAdder()
+    b = ReturningAdder()
+    print a.add(3, 5)
+    print b.add(3, 5)
+    from niukeTest.Test2 import dict
+    print dict
