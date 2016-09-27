@@ -14,7 +14,7 @@ BOT_NAME = 'TianPengSpider'
 SPIDER_MODULES = ['TianPengSpider.spiders']
 NEWSPIDER_MODULE = 'TianPengSpider.spiders'
 EXTENSIONS = {
-    'TianPengSpider.extensions.autoseed': 1,
+    'TianPengSpider.extensions.autoseed.AutoSeed': 1,
 }
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent

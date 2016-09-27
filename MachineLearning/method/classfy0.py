@@ -4,6 +4,14 @@ from numpy import tile, array
 
 
 def classfy0(inX, dataSet, labels, k):
+    '''
+    k近邻算法
+    :param inX:
+    :param dataSet:
+    :param labels:
+    :param k:
+    :return:
+    '''
     dateSetSize = dataSet.shape[0]
     diffMat = tile(inX, (dateSetSize - 1)) - dataSet
     sqdiffMat = diffMat ** 2

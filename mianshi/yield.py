@@ -9,10 +9,17 @@ yield 有什么优点,面试问道yield与list的区别,有点懵,所有的东�
 
 class A(object):
     def __init__(self,i):
-        sleep(i)
-        print(time())
+        self.i =i
+
 
 
 if __name__ == '__main__':
-    [A(i) for i in range(5)]   #返回的是迭代器
-    (A(i) for i in range(5))   #返回的是生成器
+    ss =[A(i) for i in range(5)]   #返回的是迭代器
+    st =(A(i) for i in range(5))   #返回的是生成器
+    tuple = (1,2,3,4,5,6)
+
+    for i in ss:
+        print i
+
+    for i in range(5):
+        print st.next()
